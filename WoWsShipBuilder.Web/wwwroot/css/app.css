@@ -210,11 +210,20 @@ a.kofi-button:active {
     display: none;
 }
 
-
 .column-text-center {
   text-align: center;
 }
 
 .rounded-4 {
     border-radius: 4px;
+}
+
+.mud-input {
+    color: unset !important;
+    background-color: unset !important;
+}
+
+.mud-thememanager-color-picker .mud-paper, .mud-thememanager-color-picker .mud-input {
+    color: #424242;
+    background-color: #FFFFFF;
 }

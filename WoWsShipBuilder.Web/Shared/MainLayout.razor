@@ -2,12 +2,13 @@
 @using WoWsShipBuilder.Web.Data
 @using WoWsShipBuilder.Web.Services
 @using WoWsShipBuilder.Web.Utility
+@using Newtonsoft.Json
 @inherits LayoutComponentBase
 @inject AppSettingsHelper SettingsHelper
 @inject AppSettings AppSettings
 @inject RefreshNotifierService RefreshNotifierService
 
-<MudThemeProvider Theme="@(Helpers.IsAprilFool() ? aprilFoolTheme : theme)" IsDarkMode="true"/>
+<MudThemeProvider Theme="_themeManager.Theme" IsDarkMode="false"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -18,11 +19,15 @@
 
 <MudLayout>
     <TopMenu/>
-    <MudMainContent Class="px-2">
-        <CascadingValue Name="SettingsInitialized" Value="@settingsInitialized">
-            @Body
-        </CascadingValue>
-    </MudMainContent>
+    <MudThemeManagerButton  OnClick="@((e) => OpenThemeManager(true))" />
+    <MudThemeManager  Open="_themeManagerOpen" OpenChanged="OpenThemeManager" Theme="@_themeManager" ThemeChanged="UpdateTheme" />
+    <CascadingValue Value="_themeManager.Theme">
+        <MudMainContent Class="px-2">
+            <CascadingValue Name="SettingsInitialized" Value="@settingsInitialized">
+                @Body
+            </CascadingValue>
+        </MudMainContent>
+    </CascadingValue>
     <footer style="margin-top: 16px;">
         <ShipBuilderFooter/>
     </footer>
@@ -31,6 +36,42 @@
 @code
 {
     private bool settingsInitialized;
+
+    //Remove all the xxxLighten and xxxDarken properties. They need to be null to be correctly calculated after.
+    private static string testTheme = @"{""Black"":{""Value"":""#272c34ff"",""R"":39,""G"":44,""B"":52,""A"":255,""APercentage"":1.0,""H"":217.0,""L"":0.18,""S"":0.14},""White"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Primary"":{""Value"":""#6b6868ff"",""R"":80,""G"":80,""B"":80,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.31,""S"":0.0},""PrimaryContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Secondary"":{""Value"":""#ff4081ff"",""R"":255,""G"":64,""B"":129,""A"":255,""APercentage"":1.0,""H"":340.0,""L"":0.63,""S"":1.0},""SecondaryContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Tertiary"":{""Value"":""#1ec8a5ff"",""R"":30,""G"":200,""B"":165,""A"":255,""APercentage"":1.0,""H"":168.0,""L"":0.45,""S"":0.74},""TertiaryContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Info"":{""Value"":""#2196f3ff"",""R"":33,""G"":150,""B"":243,""A"":255,""APercentage"":1.0,""H"":207.0,""L"":0.54,""S"":0.9},""InfoContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Success"":{""Value"":""#00c853ff"",""R"":0,""G"":200,""B"":83,""A"":255,""APercentage"":1.0,""H"":145.0,""L"":0.39,""S"":1.0},""SuccessContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Warning"":{""Value"":""#ff9800ff"",""R"":255,""G"":152,""B"":0,""A"":255,""APercentage"":1.0,""H"":36.0,""L"":0.5,""S"":1.0},""WarningContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Error"":{""Value"":""#f44336ff"",""R"":244,""G"":67,""B"":54,""A"":255,""APercentage"":1.0,""H"":4.0,""L"":0.58,""S"":0.9},""ErrorContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""Dark"":{""Value"":""#424242ff"",""R"":66,""G"":66,""B"":66,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.26,""S"":0.0},""DarkContrastText"":{""Value"":""#ffffffff"",""R"":255,""G"":255,""B"":255,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":1.0,""S"":0.0},""TextPrimary"":{""Value"":""#dededeff"",""R"":222,""G"":222,""B"":222,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.87,""S"":0.0},""TextSecondary"":{""Value"":""#747474ff"",""R"":116,""G"":116,""B"":116,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.45,""S"":0.0},""TextDisabled"":{""Value"":""#555555ff"",""R"":85,""G"":85,""B"":85,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.33,""S"":0.0},""ActionDefault"":{""Value"":""#505050ff"",""R"":80,""G"":80,""B"":80,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.31,""S"":0.0},""ActionDisabled"":{""Value"":""#ffffff42"",""R"":255,""G"":255,""B"":255,""A"":66,""APercentage"":0.26,""H"":0.0,""L"":1.0,""S"":0.0},""ActionDisabledBackground"":{""Value"":""#ffffff1e"",""R"":255,""G"":255,""B"":255,""A"":30,""APercentage"":0.12,""H"":0.0,""L"":1.0,""S"":0.0},""Background"":{""Value"":""#282828ff"",""R"":40,""G"":40,""B"":40,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.16,""S"":0.0},""BackgroundGrey"":{""Value"":""#f5f5f5ff"",""R"":245,""G"":245,""B"":245,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.96,""S"":0.0},""Surface"":{""Value"":""#282828ff"",""R"":40,""G"":40,""B"":40,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.16,""S"":0.0},""DrawerBackground"":{""Value"":""#121212ff"",""R"":18,""G"":18,""B"":18,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.07,""S"":0.0},""DrawerText"":{""Value"":""#dededeff"",""R"":222,""G"":222,""B"":222,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.87,""S"":0.0},""DrawerIcon"":{""Value"":""#dededeff"",""R"":222,""G"":222,""B"":222,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.87,""S"":0.0},""AppbarBackground"":{""Value"":""#121212ff"",""R"":18,""G"":18,""B"":18,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.07,""S"":0.0},""AppbarText"":{""Value"":""#dededeff"",""R"":222,""G"":222,""B"":222,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.87,""S"":0.0},""LinesDefault"":{""Value"":""#696969ff"",""R"":105,""G"":105,""B"":105,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.41,""S"":0.0},""LinesInputs"":{""Value"":""#696969ff"",""R"":105,""G"":105,""B"":105,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.41,""S"":0.0},""TableLines"":{""Value"":""#e0e0e0ff"",""R"":224,""G"":224,""B"":224,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.0,""S"":0.0},""TableStriped"":{""Value"":""#00000005"",""R"":0,""G"":0,""B"":0,""A"":5,""APercentage"":0.02,""H"":0.0,""L"":0.0,""S"":0.0},""TableHover"":{""Value"":""#0000000a"",""R"":0,""G"":0,""B"":0,""A"":10,""APercentage"":0.04,""H"":0.0,""L"":0.0,""S"":0.0},""Divider"":{""Value"":""#969696ff"",""R"":150,""G"":150,""B"":150,""A"":255,""APercentage"":1.0,""H"":0.0,""L"":0.59,""S"":0.0},""DividerLight"":{""Value"":""#ffffffcc"",""R"":255,""G"":255,""B"":255,""A"":204,""APercentage"":0.8,""H"":0.0,""L"":1.0,""S"":0.0},""HoverOpacity"":0.2,""GrayDefault"":""#9E9E9E"",""GrayLight"":""#BDBDBD"",""GrayLighter"":""#E0E0E0"",""GrayDark"":""#757575"",""GrayDarker"":""#616161"",""OverlayDark"":""rgba(33,33,33,0.4980392156862745)"",""OverlayLight"":""rgba(255,255,255,0.4980392156862745)""}";
+    
+    private ThemeManagerTheme _themeManager = new ThemeManagerTheme();
+    public bool _themeManagerOpen = false;
+
+    void OpenThemeManager(bool value)
+    {
+        _themeManagerOpen = value;
+    }
+
+    void UpdateTheme(ThemeManagerTheme value)
+    {
+        _themeManager = value;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        JsonSerializerSettings a = new JsonSerializerSettings
+        {
+            ObjectCreationHandling = ObjectCreationHandling.Reuse,
+        };
+        a.Converters.Add(new MudColorConverter());
+        Palette palette = JsonConvert.DeserializeObject<Palette>(testTheme, a);
+        _themeManager.Theme.Palette = palette;
+        _themeManager.Theme.LayoutProperties.DefaultBorderRadius = "0";
+        _themeManager.Theme.ZIndex = new()
+        {
+            Dialog = 2000,
+            Popover = 3000,
+            Tooltip = 4000,
+        };
+        StateHasChanged();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -62,6 +103,7 @@
         },
         PaletteDark =
         {
+            Background = "#282828FF",
             Black = "#121212FF",
             White = "#FDFDFDFF",
             Primary = "#505050FF",
