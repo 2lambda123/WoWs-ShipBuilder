@@ -1,75 +1,192 @@
 ﻿@page "/test2"
-@using WoWsShipBuilder.Web.Dialogs
-@using WoWsShipBuilder.Core.DataProvider
-@using WoWsShipBuilder.DataStructures
-@using WoWsShipBuilder.Core.Data
+@using System.Diagnostics
+@using Newtonsoft.Json
 
-<MudRadioGroup @bind-SelectedOption="selectedTier">
-    @for (var i = 1; i <= 11; i++)
-    {
-        int tier = i;
-        <MudRadio Option="@tier">Tier @tier</MudRadio>
-    }
-</MudRadioGroup>
+<MudGrid Justify="Justify.Center" Spacing="4" Class="ma-2">
+    <MudItem xs="12">
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="12">
+                <MudStack Row>
+                    <MudButtonGroup VerticalAlign OverrideStyles="false">
+                        <MudButton Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Variant="Variant.Text">Test</MudButton>
+                        <MudButton Variant="Variant.Filled" Disabled>Test</MudButton>
+                        <MudButton Variant="Variant.Outlined" Disabled>Test</MudButton>
+                        <MudButton Variant="Variant.Text" Disabled>Test</MudButton>
+                    </MudButtonGroup>
+                    
+                    <MudButtonGroup VerticalAlign OverrideStyles="false">
+                        <MudButton Color="Color.Primary" Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Primary" Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Primary" Variant="Variant.Text">Test</MudButton>
+                        <MudButton Color="Color.Primary" Disabled Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Primary" Disabled Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Primary" Disabled Variant="Variant.Text">Test</MudButton>
+                    </MudButtonGroup>
+                    
+                    <MudButtonGroup VerticalAlign OverrideStyles="false" >
+                        <MudButton Color="Color.Secondary" Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Secondary" Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Secondary" Variant="Variant.Text">Test</MudButton>
+                        <MudButton Color="Color.Secondary" Disabled Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Secondary" Disabled Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Secondary" Disabled Variant="Variant.Text">Test</MudButton>
+                    </MudButtonGroup>
+                    
+                    <MudButtonGroup VerticalAlign OverrideStyles="false" >
+                        <MudButton Color="Color.Info" Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Info" Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Info" Variant="Variant.Text">Test</MudButton>
+                        <MudButton Color="Color.Info" Disabled Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Info" Disabled Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Info" Disabled Variant="Variant.Text">Test</MudButton>
+                    </MudButtonGroup>
+                    
+                    <MudButtonGroup VerticalAlign OverrideStyles="false" >
+                        <MudButton Color="Color.Success" Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Success" Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Success" Variant="Variant.Text">Test</MudButton>
+                        <MudButton Color="Color.Success" Disabled Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Success" Disabled Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Success" Disabled Variant="Variant.Text">Test</MudButton>
+                    </MudButtonGroup>
+                    
+                    <MudButtonGroup VerticalAlign OverrideStyles="false" >
+                        <MudButton Color="Color.Warning" Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Warning" Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Warning" Variant="Variant.Text">Test</MudButton>
+                        <MudButton Color="Color.Warning" Disabled Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Warning" Disabled Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Warning" Disabled Variant="Variant.Text">Test</MudButton>
+                    </MudButtonGroup>
+                    
+                    <MudButtonGroup VerticalAlign OverrideStyles="false" >
+                        <MudButton Color="Color.Error" Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Error" Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Error" Variant="Variant.Text">Test</MudButton>
+                        <MudButton Color="Color.Error" Disabled Variant="Variant.Filled">Test</MudButton>
+                        <MudButton Color="Color.Error" Disabled Variant="Variant.Outlined">Test</MudButton>
+                        <MudButton Color="Color.Error" Disabled Variant="Variant.Text">Test</MudButton>
+                    </MudButtonGroup>
+                </MudStack>
+            </MudItem>
+            
+            <MudItem xs="4">
+                <MudStack Row>
+                    <MudList Clickable="true" >
+                        <MudListItem Text="Inbox" />
+                        <MudDivider Light="false" DividerType="DividerType.Inset" />
+                        <MudListItem Text="Sent"/>
+                        <MudDivider Light DividerType="DividerType.Middle" />
+                        <MudListItem Text="Trash" />
+                        <MudDivider DividerType="DividerType.FullWidth" />
+                        <MudListItem Text="Spam" />
+                    </MudList>
+                    
+                    <MudList Color="Color.Primary" Clickable="true" >
+                        <MudListItem Text="Inbox" />
+                        <MudDivider Light="false" DividerType="DividerType.Inset" />
+                        <MudListItem Text="Sent"/>
+                        <MudDivider Light DividerType="DividerType.Middle" />
+                        <MudListItem Text="Trash" />
+                        <MudDivider DividerType="DividerType.FullWidth" />
+                        <MudListItem Text="Spam" />
+                    </MudList>
+                    
+                    <MudList Color="Color.Secondary" Clickable="true" >
+                        <MudListItem Text="Inbox" />
+                        <MudDivider Light="false" DividerType="DividerType.Inset" />
+                        <MudListItem Text="Sent"/>
+                        <MudDivider Light DividerType="DividerType.Middle" />
+                        <MudListItem Text="Trash" />
+                        <MudDivider DividerType="DividerType.FullWidth" />
+                        <MudListItem Text="Spam" />
+                    </MudList>
+                </MudStack>
+            </MudItem>
+            
+            <MudItem xs="4">
+                <MudStack Row>
+                    <MudSelect Variant="Variant.Filled" T="string" Label="Coffee" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem Value="@("Cappuccino")" />
+                        <MudSelectItem Value="@("Cafe Latte")" />
+                        <MudSelectItem Value="@("Espresso")" />
+                    </MudSelect>
+                    
+                    <MudSelect Variant="Variant.Outlined" T="string" Label="Coffee" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem Value="@("Cappuccino")" />
+                        <MudSelectItem Value="@("Cafe Latte")" />
+                        <MudSelectItem Value="@("Espresso")" />
+                    </MudSelect>
+                    
+                    <MudSelect Variant="Variant.Text" T="string" Label="Coffee" AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem Value="@("Cappuccino")" />
+                        <MudSelectItem Value="@("Cafe Latte")" />
+                        <MudSelectItem Value="@("Espresso")" />
+                    </MudSelect>
+                </MudStack>
+            </MudItem>
+            
+            <MudItem xs="4">
+                <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+                    <MudTabPanel Text="Tab One">
+                        <MudStack>
+                            <MudChip>Chip 1</MudChip>
+                            <MudTooltip Text="Tooltip Text">
+                                <MudCheckBox T="bool">Test</MudCheckBox>
+                            </MudTooltip>
+                            <MudSwitch T="bool">Test</MudSwitch>
+                            <MudSwitch T="bool" Disabled>DisabledTest</MudSwitch>
+                        </MudStack>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Tab Two">
+                        <MudStack>
+                            <MudChip>Chip 1</MudChip>
+                            <MudTooltip Text="Tooltip Text">
+                                <MudCheckBox T="bool">Test</MudCheckBox>
+                            </MudTooltip>
+                            <MudSwitch T="bool">Test</MudSwitch>
+                            <MudSwitch T="bool" Disabled>DisabledTest</MudSwitch>
+                        </MudStack>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Tab Three">
+                        <MudStack>
+                            <MudChip>Chip 1</MudChip>
+                            <MudTooltip Text="Tooltip Text">
+                                <MudCheckBox T="bool">Test</MudCheckBox>
+                            </MudTooltip>
+                            <MudSwitch T="bool">Test</MudSwitch>
+                            <MudSwitch T="bool" Disabled>DisabledTest</MudSwitch>
+                        </MudStack>
+                    </MudTabPanel>
+                </MudTabs>
+            </MudItem>
+            
+        </MudGrid>
+    </MudItem>
+    <MudItem xs="12">
+        <MudPaper Outlined>
+            <MudStack Spacing="4">
+                <MudText>Normal Palette: </MudText>
+                <MudExpansionPanel IsInitiallyExpanded="false">
+                    <MudText>@themePaletteString</MudText>
+                </MudExpansionPanel>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+<MudButton OnClick="DebugPrintTheme" Variant="Variant.Filled">Debug Print theme</MudButton>
 
-<MudRadioGroup @bind-SelectedOption="selectedClass">
-    @foreach(var shipClass in Enum.GetValues<ShipClass>().Except(new [] { ShipClass.Auxiliary }))
-    {
-        <MudRadio Option="@shipClass">@shipClass</MudRadio>
-    }
-</MudRadioGroup>
-
-<MudButton OnClick="@Callback">Show build configuration dialog</MudButton>
-<BuildConfigurationDialogHelper @ref="buildConfigurationHelper" MaxWidth="MaxWidth.Large" FullWidth NoHeader />
 
 @code {
+    [CascadingParameter]
+    public MudTheme Theme { get; set; }
 
-    private List<ShipBuildContainer> ships = new();
+    private string themePaletteString;
 
-    private int selectedTier = 10;
-
-    private int lastTier = 10;
-
-    private ShipClass selectedClass = ShipClass.Cruiser;
-
-    private ShipClass lastClass = ShipClass.Cruiser;
-
-    private BuildConfigurationDialogHelper buildConfigurationHelper = default!;
-
-    protected override async Task OnInitializedAsync()
+    public void DebugPrintTheme()
     {
-        await base.OnInitializedAsync();
-        UpdateShipList();
+        themePaletteString = JsonConvert.SerializeObject(Theme.Palette);
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (lastTier != selectedTier || lastClass != selectedClass)
-        {
-            lastTier = selectedTier;
-            lastClass = selectedClass;
-            UpdateShipList();
-        }
-    }
-
-    private void UpdateShipList()
-    {
-        var shipList = AppData.ShipSummaryList
-            .Where(s => s.Tier == selectedTier && s.ShipClass == selectedClass)
-            .Take(25)
-            .Select(AppData.FindShipFromSummary);
-        ships = shipList.Select(s => ShipBuildContainer.CreateNew(s, null, null)).ToList();
-        StateHasChanged();
-    }
-
-    private async Task Callback()
-    {
-        var result = await buildConfigurationHelper.ShowDialogAsync(ships);
-        if (result is not null)
-        {
-            ships = result.ToList();
-        }
-    }
-
 }
