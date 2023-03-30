@@ -29,7 +29,7 @@
                     @foreach (var captain in ViewModel.CaptainList!)
                     {
                         <MudSelectItem Value="captain">
-                            <MudText Typo="Typo.body2" Color="Color.Secondary">
+                            <MudText Typo="Typo.body2">
                                 @Localizer.GetGameLocalization(captain.Name).Localization
                             </MudText>
                         </MudSelectItem>
@@ -176,7 +176,7 @@
 
     private Color GetColorFromState(SkillItemViewModel skillItem)
     {
-        return ViewModel!.SkillOrderList.Any(x => x.SkillNumber.Equals(skillItem.Skill.SkillNumber)) ? Color.Error : !skillItem.CanExecute ? Color.Primary : Color.Secondary;
+        return ViewModel!.SkillOrderList.Any(x => x.SkillNumber.Equals(skillItem.Skill.SkillNumber)) ? Color.Error : Color.Primary ;
     }
     
     private void OnSkillClick(SkillItemViewModel skillItem)

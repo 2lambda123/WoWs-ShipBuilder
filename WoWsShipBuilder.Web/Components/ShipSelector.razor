@@ -55,7 +55,7 @@
             <MudList @ref="mudList" Clickable="true" SelectedValueChanged="AddShip">
                 <MudVirtualize IsEnabled="true" Items="@filteredSummaryList" Context="pair">
                     <MudListItem Style="text-align: center" Value="@pair.Value.Index">
-                        <MudText Color="Color.Secondary">
+                        <MudText>
                             @(pair.Key)
                         </MudText>
                     </MudListItem>
